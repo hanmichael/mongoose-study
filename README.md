@@ -46,3 +46,112 @@
         if(err) console.log(err);
         console.log(people);
     });
+    //查找符合条件数据
+    animalMode.findOne({title: 'catName'}, function(err, cat){
+        if(err) console.log(err);
+        console.log(cat);
+    });
+
+
+##Schema
+**数据类型**
+这是Schema中所有的数据类型，包括mongoose自定的数据类型
+
+ - [String][1]
+ - [Number][2]
+ - [Date][3]
+ - [Buffer][4]
+ - Boolean
+ - Mixed
+ - [ObjectId][5]
+ - Array
+
+每种数据类型的使用
+
+    var animalMode = mongoose.model('Animal', schema);
+    
+    var cat = new animalMode;
+    cat.name = 'Statue of Liberty'              //String
+    cat.age = '7';                              //Number
+    cat.updated = new Date;                     //Date
+    cat.binary = new Buffer(0);                 //Buffer
+    cat.living = false;                         //Boolean
+    cat.mixed = { any: { thing: 'i want' } };   //Mixed              
+    cat._someId = new mongoose.Types.ObjectId;  //ObjectId
+    cat.ofString.push("strings!");              //Array
+
+其中Mixed是mongoose自定义的一种混合类型，因为Mixed没有定义具体内容，可以用{}来使用，以下2种定义形式等价。
+
+    var animalSchema = new Schema({any: {}});
+    var animalSchema = new Schema({any: {Schema.Types.Mixed}});
+
+
+----------
+**自定义方法**
+
+可以为Schema绑定方法
+
+    var animalSchema = new Schema({
+        name: String,
+        age: Number,
+    });
+    
+    animalSchema.methods.findSimilarTypes = function (cb) {
+        return this.model('Animal').find({ name: this.name }, cb);
+    }
+    
+    var animalMode = db.model('Animal', animalSchema);
+    
+    cat.findSimilarTypes(function(err, cat){
+        if(err) console.log(err);
+        console.log(cat);
+    });
+   
+也可以为Schema添加静态方法
+
+    animalSchema.statics.findByName = function (name, cb) {
+        return this.find({ name: new RegExp(name, 'i') }, cb);
+    }
+    var animalMode = db.model('Animal', animalSchema);
+    
+    animalMode.findByName('catName', function (err, animals) {
+        console.log(animals);
+    });
+    
+
+
+----------
+**索引**
+我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的
+
+    var animalSchema = new Schema({
+      name: String,
+      age: Number,
+      tags: { age: [String], index: true } // field level
+    });
+    
+    animalSchema.index({ name: 1, age: -1 }); // schema level
+
+但是这种索引的建立可能导致显著的性能影响，建议在生产下停止，将设置模式下的自动索引设置为false禁止
+
+    animalSchema.set('autoIndex', false);
+    // or
+    new Schema({..}, { autoIndex: false });
+
+----------
+
+
+##资源推荐
+[mongoosejs.com][6]
+
+
+
+持续更新中...
+
+
+  [1]: http://mongoosejs.com/docs/api.html#schema-string-js
+  [2]: http://mongoosejs.com/docs/api.html#schema-number-js
+  [3]: http://mongoosejs.com/docs/api.html#schema-date-js
+  [4]: http://mongoosejs.com/docs/api.html#schema-buffer-js
+  [5]: http://mongoosejs.com/docs/api.html#schema-objectid-js
+  [6]: http://mongoosejs.com/docs/guide.html
