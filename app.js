@@ -2,36 +2,32 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var db = mongoose.connection;
 
+mongoose.connect('mongodb://localhost/animal');
+
 db.on('error', console.error);
 db.once('open', function() {
   //在这里创建你的模式和模型
-  var movieSchema = new Schema({
-    title: {
-      type: String
-    },
-    rating: String,
-    releaseYear: Number,
-    hasCreditCookie: Boolean
+  var animalSchema = new Schema({
+    name: String,
+    age: Number,
   });
 
-  //创建自定义模式文档方法
-  movieSchema.methods.findTypes(function(cb){
-    return this.model('movieMode').find({title: this.title}, cb);
-  }); 
+  // //创建自定义模式文档方法
+  // movieSchema.methods.findTypes(function(cb){
+  //   return this.model('movieMode').find({title: this.title}, cb);
+  // }); 
 
-  var movieMode = db.model('Movie', movieSchema);
+  var animalMode = db.model('Animal', animalSchema);
 
 
-  var movieEntity = new movieMode({
-    title: 'Thor1',
-    rating: 'PG-13',
-    releaseYear: '2011', //注意我们在这里使用一个字符串而不是一个数字 -- Mongoose会为我们自动转换     
-    hasCreditCookie: true
+  var cat = new animalMode({
+    name: 'catName',
+    age: '7',    //这里依然使用字符串，mongoose会自动转换类型
   });
 
-  movieEntity.save(function(err, thor) {
+  cat.save(function(err, thor) {
     if (err) return console.log(err);
-    //console.log(thor);
+    console.log(thor);
   });
 
   //查找符合条件数据
@@ -41,16 +37,15 @@ db.once('open', function() {
   // });
 
   //查找所有数据
-  // movieMode.find(function(err, movie){
-  //   if(err) console.log(err);
-  //   console.log(movie);
-  // });
-
-  movieEntity.findTypes(function(err, movies) {
-    if (err) return console.error(err);
-    console.log(movies);
+  animalMode.find(function(err, people){
+    if(err) console.log(err);
+    console.log(people);
   });
+
+  // movieEntity.findTypes(function(err, movies) {
+  //   if (err) return console.error(err);
+  //   console.log(movies);
+  // });
 
 });
 
-mongoose.connect('mongodb://localhost/test');
