@@ -10,7 +10,7 @@
 
 ##初始化使用
 使用mongoose前，需安装node和mongodb，这里不讲node和mongodb的安装方法。
-
+```javascript
     var mongoose = require("mongoose");
     var Schema = mongoose.Schema;
     var db = mongoose.connection;
@@ -19,26 +19,28 @@
     db.once('open', function() {
        //这里建立模式和模型
     }
-
+```
 
 ----------
 
 
 ##快速入门
 在mongoose中，所有的数据都是一种模式，每个模式都映射到mongodb的集合，并且定义该集合文件结构。
-
+```javascript
     //这里建立一个动物的模式，所有动物都拥有这个模式下的所有属性
     var animalSchema = new Schema({
         name: String,
         age: Number,
     });
+```
 
 模型是我们从Schema中定义的一种多样化的构造函数，模型的实例可以使用很多操作，所有文档的创建和检索都是由模型来处理
-
+```javascript
     var animalMode = db.model('Animal', animalSchema);
-    
-模型的实例实质是文件，而我们可以很轻松创建、修改这种文件
+```
 
+模型的实例实质是文件，而我们可以很轻松创建、修改这种文件
+```javascript
     var cat = new animalMode({
         name: 'catName',
         age: '7',    //这里依然使用字符串，mongoose会自动转换类型
@@ -64,7 +66,7 @@
         if(err) console.log(err);
         console.log(cat);
     });
-
+```
 
 ----------
 
@@ -83,7 +85,7 @@
  - Array
 
 每种数据类型的使用
-
+```javascript
     var animalMode = mongoose.model('Animal', schema);
     
     var cat = new animalMode;
@@ -95,18 +97,19 @@
     cat.mixed = { any: { thing: 'i want' } };   //Mixed              
     cat._someId = new mongoose.Types.ObjectId;  //ObjectId
     cat.ofString.push("strings!");              //Array
+```
 
 其中Mixed是mongoose自定义的一种混合类型，因为Mixed没有定义具体内容，可以用{}来使用，以下2种定义形式等价。
-
+```javascript
     var animalSchema = new Schema({any: {}});
     var animalSchema = new Schema({any: {Schema.Types.Mixed}});
-
+```
 
 ----------
 **自定义方法**
 
 可以为Schema绑定方法
-
+```javascript
     var animalSchema = new Schema({
         name: String,
         age: Number,
@@ -122,9 +125,10 @@
         if(err) console.log(err);
         console.log(cat);
     });
-   
+```
+ 
 也可以为Schema添加静态方法
-
+```javascript
     animalSchema.statics.findByName = function (name, cb) {
         return this.find({ name: new RegExp(name, 'i') }, cb);
     }
@@ -133,13 +137,13 @@
     animalMode.findByName('catName', function (err, animals) {
         console.log(animals);
     });
-    
+``` 
 
 
 ----------
 **索引**
 我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的
-
+```javascript
     var animalSchema = new Schema({
       name: String,
       age: Number,
@@ -147,17 +151,18 @@
     });
     
     animalSchema.index({ name: 1, age: -1 }); // schema level
-
+```
 但是这种索引的建立可能导致显著的性能影响，建议在生产下停止，将设置模式下的自动索引设置为false禁止
-
+```javascript
     animalSchema.set('autoIndex', false);
     // or
     new Schema({..}, { autoIndex: false });
-
+```
 ----------
 
 ##Model
 ###C
+```javascript
     cat.save(function(err, thor) {
         if (err) return console.log(err);
         console.log(thor);
@@ -167,10 +172,11 @@
         if (err) return console.log(err);
         console.log(thor);
     });
-
+```
 ###R
 
-    //查找所有数据
+```javascript
+//查找所有数据
     animalMode.find(function(err, cat){
         if (err) console.log(err);
         console.log(cat);
@@ -181,6 +187,7 @@
         if (err) console.log(err);
         console.log(cat);
     })
+```
 
 ###U
 官方文档提供的更新函数[Model.update][6]
@@ -200,13 +207,13 @@
     -numberAffected （笔者暂时不清楚）
     -rawResponse 受影响的行数
 
-   '''javascript
+   ```javascript
    animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
     if (err) return console.log(err);
     console.log('The number of updated documents was %d', numberAffected);
     console.log('The raw response from Mongo was ', raw);
   });
-   '''
+   ```
 
 ##资源推荐
 [mongoosejs.com][7]
