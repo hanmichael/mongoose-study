@@ -122,6 +122,7 @@
 
 ----------
 **索引**
+
 我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的
 
     var animalSchema = new Schema({
