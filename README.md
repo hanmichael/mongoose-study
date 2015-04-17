@@ -176,17 +176,40 @@
 ###R
 
 ```javascript
-//查找所有数据
-    animalMode.find(function(err, cat){
-        if (err) console.log(err);
-        console.log(cat);
-    })
+//find
+animalMode.find(function(err, cat){
+    if (err) console.log(err);
+    console.log(cat);
+})
       
-    //查找指定数据
-    animalMode.findOne({name: 'catName'}, function(err, cat){
-        if (err) console.log(err);
-        console.log(cat);
-    })
+//findOne
+animalMode.findOne({name: 'catName'}, function(err, cat){
+    if (err) console.log(err);
+    console.log(cat);
+})
+
+//findByID
+//与 findOne 相同，但它接收文档的 _id 作为参数，返回单个文档。_id //可以是字符串或 ObjectId 对象。
+animalMode.findById(id, function(err, adventure){
+    if (err) consoel.log(err);
+    console.log(adventure);
+});
+
+//where
+//查询数据类型是字符串时，可支持正则
+animalMode.where('age', '2').exec(function(err, cat){
+    if (err) console.log(err);
+    console.log(cat);
+});
+
+animalMode
+    .where('age').gte(1).lte(10)
+    .where('name', 'catName')
+    .exec(function(err, cat){
+      if (err) console.log(err);
+      console.log(cat);
+    });
+
 ```
 
 ###U
@@ -215,12 +238,37 @@
   });
    ```
 
+###D
+```javascript
+animalMode.remove({age: 6}, function(err){
+    if (err) console.log(err);
+})
+```
+
+###其它
+```javascript
+//返回文档数
+animalMode.count({age: 2}, function(err, cat){
+    if (err) console.log(err);
+    console.log(cat);
+})
+```
+
+
+----------
+
+
 ##资源推荐
 [mongoosejs.com][7]
 
 
 
-持续更新中...
+    
+
+> 持续更新中...
+
+    由于笔者也是初学者，有地方讲的不对，
+    欢迎给我邮件（417022902@qq.com）谢谢^-^
 
 
   [1]: http://mongoosejs.com/docs/api.html#schema-string-js

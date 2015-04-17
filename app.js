@@ -49,13 +49,40 @@ db.once('open', function() {
   //   console.log(cat);
   // });
   
-  animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
-    if (err) return console.log(err);
-    console.log('The number of updated documents was %d', numberAffected);
-    console.log('The raw response from Mongo was ', raw);
-  });
+  // animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
+  //   if (err) return console.log(err);
+  //   console.log('The number of updated documents was %d', numberAffected);
+  //   console.log('The raw response from Mongo was ', raw);
+  // });
+  
+  // animalMode.remove({age: 6}, function(err){
+  //   if (err) console.log(err);
+  // })
 
-  animalMode.find(function(err, cat){
+  // animalMode.find(function(err, cat){
+  //   if (err) console.log(err);
+  //   console.log(cat);
+  // })
+
+  // animalMode.findById(id, function(err, adventure){
+  //   if (err) consoel.log(err);
+  //   console.log(adventure);
+  // });
+  
+  // animalMode.where('age', '2').exec(function(err, cat){
+  //   if (err) console.log(err);
+  //   console.log(cat);
+  // });
+
+  // animalMode
+  //   .where('age').gte(1).lte(10)
+  //   .where('name', 'catName')
+  //   .exec(function(err, cat){
+  //     if (err) console.log(err);
+  //     console.log(cat);
+  //   });
+
+  animalMode.count({age: 2}, function(err, cat){
     if (err) console.log(err);
     console.log(cat);
   })
