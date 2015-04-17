@@ -1,0 +1,20 @@
+{
+  "name": "myproject",
+  "version": "1.0.0",
+  "description": "My first project",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/christkv/myfirstproject.git"
+  },
+  "dependencies": {
+    "mongodb": "~2.0",
+    "mongoose": "4.0.1"
+  },
+  "author": "jay",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/christkv/myfirstproject/issues"
+  },
+  "homepage": "https://github.com/christkv/myfirstproject"
+}
