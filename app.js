@@ -12,12 +12,12 @@ db.once('open', function() {
     age: Number,
   });
 
-animalSchema.methods.findSimilarTypes = function (cb) {
-  return this.model('Animal').find({ name: this.name }, cb);
-}
-animalSchema.statics.findByName = function (name, cb) {
-  return this.find({ name: new RegExp(name, 'i') }, cb);
-}
+// animalSchema.methods.findSimilarTypes = function (cb) {
+//   return this.model('Animal').find({ name: this.name }, cb);
+// }
+// animalSchema.statics.findByName = function (name, cb) {
+//   return this.find({ name: new RegExp(name, 'i') }, cb);
+// }
   // //创建自定义模式文档方法
   // movieSchema.methods.findTypes(function(cb){
   //   return this.model('movieMode').find({title: this.title}, cb);
@@ -25,9 +25,9 @@ animalSchema.statics.findByName = function (name, cb) {
 
   var animalMode = db.model('Animal', animalSchema);
 
-  animalMode.findByName('catName', function (err, animals) {
-    console.log(animals);
-  });
+  // animalMode.findByName('catName', function (err, animals) {
+  //   console.log(animals);
+  // });
 
 
   // var cat = new animalMode({
@@ -38,6 +38,31 @@ animalSchema.statics.findByName = function (name, cb) {
   // cat.save(function(err, thor) {
   //   if (err) return console.log(err);
   //   //console.log(thor);
+  // });
+
+  // animalMode.find(function(err, cat){
+  //   if (err) console.log(err);
+  //   console.log(cat);
+  // })
+  // animalMode.findOne({name: 'catName'}, function(err, cat){
+  //   if (err) console.log(err);
+  //   console.log(cat);
+  // });
+  
+  animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
+    if (err) return console.log(err);
+    console.log('The number of updated documents was %d', numberAffected);
+    console.log('The raw response from Mongo was ', raw);
+  });
+
+  animalMode.find(function(err, cat){
+    if (err) console.log(err);
+    console.log(cat);
+  })
+
+  // animalMode.findOne({name: 'catName'}, function(err, cat){
+  //   if (err) console.log(err);
+  //   console.log(cat);
   // });
 
   // cat.findSimilarTypes(function(err, cat){

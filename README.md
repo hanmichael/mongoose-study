@@ -4,6 +4,10 @@
 
 > npm install mongoose
 
+
+----------
+
+
 ##初始化使用
 使用mongoose前，需安装node和mongodb，这里不讲node和mongodb的安装方法。
 
@@ -15,6 +19,10 @@
     db.once('open', function() {
        //这里建立模式和模型
     }
+
+
+----------
+
 
 ##快速入门
 在mongoose中，所有的数据都是一种模式，每个模式都映射到mongodb的集合，并且定义该集合文件结构。
@@ -40,6 +48,11 @@
         if (err) return console.log(err);
         console.log(thor);
     });
+    //或者可以使用create
+    //cat.create(function(err, thor) {
+    //    if (err) return console.log(err);
+    //    console.log(thor);
+    //});
     
     //执行查找
     animalMode.find(function(err, people){
@@ -51,6 +64,9 @@
         if(err) console.log(err);
         console.log(cat);
     });
+
+
+----------
 
 
 ##Schema
@@ -122,7 +138,6 @@
 
 ----------
 **索引**
-
 我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的
 
     var animalSchema = new Schema({
@@ -141,9 +156,60 @@
 
 ----------
 
+##Model
+###C
+    cat.save(function(err, thor) {
+        if (err) return console.log(err);
+        console.log(thor);
+    });
+    //或者可以使用create
+    cat.create(function(err, thor) {
+        if (err) return console.log(err);
+        console.log(thor);
+    });
+
+###R
+
+    //查找所有数据
+    animalMode.find(function(err, cat){
+        if (err) console.log(err);
+        console.log(cat);
+    })
+      
+    //查找指定数据
+    animalMode.findOne({name: 'catName'}, function(err, cat){
+        if (err) console.log(err);
+        console.log(cat);
+    })
+
+###U
+官方文档提供的更新函数[Model.update][6]
+
+    Model.update(conditions, doc, [options], [callback])
+
+ - conditions   更新条件
+ - doc  更新内容
+ - option   更新选项
+    -safe (boolean) 安全模式，默认选项，值为true
+    -upsert (boolean) 条件不匹配时是否创建新文档，默认值为false
+    -multi (boolean) 是否更新多个文件，默认值为false
+    -strict (boolean) 严格模式，只更新一条数据
+    -overwrite (boolean) 覆盖数据，默认为false
+ - callback
+    -err 更新数据出错时返回值
+    -numberAffected （笔者暂时不清楚）
+    -rawResponse 受影响的行数
+
+   '''javascript
+   animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
+    if (err) return console.log(err);
+    console.log('The number of updated documents was %d', numberAffected);
+    console.log('The raw response from Mongo was ', raw);
+  });
+   '''
 
 ##资源推荐
-[mongoosejs.com][6]
+[mongoosejs.com][7]
 
 
 
@@ -155,4 +221,5 @@
   [3]: http://mongoosejs.com/docs/api.html#schema-date-js
   [4]: http://mongoosejs.com/docs/api.html#schema-buffer-js
   [5]: http://mongoosejs.com/docs/api.html#schema-objectid-js
-  [6]: http://mongoosejs.com/docs/guide.html
+  [6]: http://mongoosejs.com/docs/api.html#model_Model.update
+  [7]: http://mongoosejs.com/docs/guide.html
