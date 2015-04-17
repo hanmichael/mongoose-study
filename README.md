@@ -223,16 +223,16 @@ animalMode
  - doc  更新内容
  - option   更新选项
 
-    -safe (boolean) 安全模式，默认选项，值为true
-    -upsert (boolean) 条件不匹配时是否创建新文档，默认值为false
-    -multi (boolean) 是否更新多个文件，默认值为false
-    -strict (boolean) 严格模式，只更新一条数据
-    -overwrite (boolean) 覆盖数据，默认为false
+    - safe (boolean) 安全模式，默认选项，值为true
+    - upsert (boolean) 条件不匹配时是否创建新文档，默认值为false
+    - multi (boolean) 是否更新多个文件，默认值为false
+    - strict (boolean) 严格模式，只更新一条数据
+    - overwrite (boolean) 覆盖数据，默认为false
 
  - callback
-    -err 更新数据出错时返回值
-    -numberAffected （笔者暂时不清楚）
-    -rawResponse 受影响的行数
+    - err 更新数据出错时返回值
+    - numberAffected （笔者暂时不清楚）
+    - rawResponse 受影响的行数
 
    ```javascript
    animalMode.update({name: 'catName'}, {age: '6'}, {multi : true}, function(err, numberAffected, raw){
