@@ -73,6 +73,7 @@
 
 ##Schema
 **数据类型**
+
 这是Schema中所有的数据类型，包括mongoose自定的数据类型
 
  - [String][1]
@@ -142,6 +143,7 @@
 
 ----------
 **索引**
+
 我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的
 ```javascript
     var animalSchema = new Schema({
@@ -220,11 +222,13 @@ animalMode
  - conditions   更新条件
  - doc  更新内容
  - option   更新选项
+
     -safe (boolean) 安全模式，默认选项，值为true
     -upsert (boolean) 条件不匹配时是否创建新文档，默认值为false
     -multi (boolean) 是否更新多个文件，默认值为false
     -strict (boolean) 严格模式，只更新一条数据
     -overwrite (boolean) 覆盖数据，默认为false
+
  - callback
     -err 更新数据出错时返回值
     -numberAffected （笔者暂时不清楚）
