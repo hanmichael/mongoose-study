@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Mongoose-study by jayZOU</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Mongoose-study</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/jayZOU/mongoose-study" class="btn">View on GitHub</a>
+      <a href="https://github.com/jayZOU/mongoose-study/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jayZOU/mongoose-study/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="mongoose-study" class="anchor" href="#mongoose-study" aria-hidden="true"><span class="octicon octicon-link"></span></a>mongoose-study</h1>
+
+<p>使用mongoose可以让我们更好使用mongodb数据库，而不需要写繁琐的业务逻辑。</p>
+
+<h2>
+<a id="安装" class="anchor" href="#%E5%AE%89%E8%A3%85" aria-hidden="true"><span class="octicon octicon-link"></span></a>安装</h2>
+
+<blockquote>
+<p>npm install mongoose</p>
+</blockquote>
+
+<hr>
+
+<h2>
+<a id="初始化使用" class="anchor" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BD%BF%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>初始化使用</h2>
+
+<p>使用mongoose前，需安装node和mongodb，这里不讲node和mongodb的安装方法。</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> mongoose <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">"</span>mongoose<span class="pl-pds">"</span></span>);
+    <span class="pl-k">var</span> Schema <span class="pl-k">=</span> mongoose.Schema;
+    <span class="pl-k">var</span> db <span class="pl-k">=</span> mongoose.connection;
+    mongoose.connect(<span class="pl-s"><span class="pl-pds">'</span>mongodb://localhost/animal<span class="pl-pds">'</span></span>);
+    db.on(<span class="pl-s"><span class="pl-pds">'</span>error<span class="pl-pds">'</span></span>, <span class="pl-en">console</span><span class="pl-c1">.error</span>);
+    db.once(<span class="pl-s"><span class="pl-pds">'</span>open<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>() {
+       <span class="pl-c">//这里建立模式和模型</span>
+    }</pre></div>
+
+<hr>
+
+<h2>
+<a id="快速入门" class="anchor" href="#%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>快速入门</h2>
+
+<p>在mongoose中，所有的数据都是一种模式，每个模式都映射到mongodb的集合，并且定义该集合文件结构。</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-c">//这里建立一个动物的模式，所有动物都拥有这个模式下的所有属性</span>
+    <span class="pl-k">var</span> animalSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>({
+        name<span class="pl-k">:</span> <span class="pl-c1">String</span>,
+        age<span class="pl-k">:</span> <span class="pl-c1">Number</span>,
+    });</pre></div>
+
+<p>模型是我们从Schema中定义的一种多样化的构造函数，模型的实例可以使用很多操作，所有文档的创建和检索都是由模型来处理</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> animalMode <span class="pl-k">=</span> db.model(<span class="pl-s"><span class="pl-pds">'</span>Animal<span class="pl-pds">'</span></span>, animalSchema);</pre></div>
+
+<p>模型的实例实质是文件，而我们可以很轻松创建、修改这种文件</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> cat <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">animalMode</span>({
+        name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>,
+        age<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>7<span class="pl-pds">'</span></span>,    <span class="pl-c">//这里依然使用字符串，mongoose会自动转换类型</span>
+      });
+
+    cat.save(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">thor</span>) {
+        <span class="pl-k">if</span> (err) <span class="pl-k">return</span> <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(thor);
+    });
+    <span class="pl-c">//或者可以使用create</span>
+    <span class="pl-c">//cat.create(function(err, thor) {</span>
+    <span class="pl-c">//    if (err) return console.log(err);</span>
+    <span class="pl-c">//    console.log(thor);</span>
+    <span class="pl-c">//});</span>
+
+    <span class="pl-c">//执行查找</span>
+    animalMode.<span class="pl-c1">find</span>(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">people</span>){
+        <span class="pl-k">if</span>(err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(people);
+    });
+    <span class="pl-c">//查找符合条件数据</span>
+    animalMode.findOne({title<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>}, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+        <span class="pl-k">if</span>(err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+    });</pre></div>
+
+<hr>
+
+<h2>
+<a id="schema" class="anchor" href="#schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>Schema</h2>
+
+<p><strong>数据类型</strong></p>
+
+<p>这是Schema中所有的数据类型，包括mongoose自定的数据类型</p>
+
+<ul>
+<li><a href="http://mongoosejs.com/docs/api.html#schema-string-js">String</a></li>
+<li><a href="http://mongoosejs.com/docs/api.html#schema-number-js">Number</a></li>
+<li><a href="http://mongoosejs.com/docs/api.html#schema-date-js">Date</a></li>
+<li><a href="http://mongoosejs.com/docs/api.html#schema-buffer-js">Buffer</a></li>
+<li>Boolean</li>
+<li>Mixed</li>
+<li><a href="http://mongoosejs.com/docs/api.html#schema-objectid-js">ObjectId</a></li>
+<li>Array</li>
+</ul>
+
+<p>每种数据类型的使用</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> animalMode <span class="pl-k">=</span> mongoose.model(<span class="pl-s"><span class="pl-pds">'</span>Animal<span class="pl-pds">'</span></span>, schema);
+
+    <span class="pl-k">var</span> cat <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">animalMode</span>;
+    cat.<span class="pl-c1">name</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Statue of Liberty<span class="pl-pds">'</span></span>              <span class="pl-c">//String</span>
+    cat.age <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>7<span class="pl-pds">'</span></span>;                              <span class="pl-c">//Number</span>
+    cat.updated <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Date</span>;                     <span class="pl-c">//Date</span>
+    cat.binary <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Buffer</span>(<span class="pl-c1">0</span>);                 <span class="pl-c">//Buffer</span>
+    cat.living <span class="pl-k">=</span> <span class="pl-c1">false</span>;                         <span class="pl-c">//Boolean</span>
+    cat.mixed <span class="pl-k">=</span> { any<span class="pl-k">:</span> { thing<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>i want<span class="pl-pds">'</span></span> } };   <span class="pl-c">//Mixed              </span>
+    cat._someId <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">mongoose.Types</span>.ObjectId;  <span class="pl-c">//ObjectId</span>
+    cat.ofString.<span class="pl-c1">push</span>(<span class="pl-s"><span class="pl-pds">"</span>strings!<span class="pl-pds">"</span></span>);              <span class="pl-c">//Array</span></pre></div>
+
+<p>其中Mixed是mongoose自定义的一种混合类型，因为Mixed没有定义具体内容，可以用{}来使用，以下2种定义形式等价。</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> animalSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>({any<span class="pl-k">:</span> {}});
+    <span class="pl-k">var</span> animalSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>({any<span class="pl-k">:</span> {Schema.Types.Mixed}});</pre></div>
+
+<hr>
+
+<p><strong>自定义方法</strong></p>
+
+<p>可以为Schema绑定方法</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> animalSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>({
+        name<span class="pl-k">:</span> <span class="pl-c1">String</span>,
+        age<span class="pl-k">:</span> <span class="pl-c1">Number</span>,
+    });
+
+    <span class="pl-c1">animalSchema.methods</span>.<span class="pl-en">findSimilarTypes</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">cb</span>) {
+        <span class="pl-k">return</span> <span class="pl-v">this</span>.model(<span class="pl-s"><span class="pl-pds">'</span>Animal<span class="pl-pds">'</span></span>).<span class="pl-c1">find</span>({ name<span class="pl-k">:</span> <span class="pl-v">this</span>.<span class="pl-c1">name</span> }, cb);
+    }
+
+    <span class="pl-k">var</span> animalMode <span class="pl-k">=</span> db.model(<span class="pl-s"><span class="pl-pds">'</span>Animal<span class="pl-pds">'</span></span>, animalSchema);
+
+    cat.findSimilarTypes(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+        <span class="pl-k">if</span>(err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+    });</pre></div>
+
+<p>也可以为Schema添加静态方法</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-c1">animalSchema.statics</span>.<span class="pl-en">findByName</span> <span class="pl-k">=</span> <span class="pl-k">function</span> (<span class="pl-smi">name</span>, <span class="pl-smi">cb</span>) {
+        <span class="pl-k">return</span> <span class="pl-v">this</span>.<span class="pl-c1">find</span>({ name<span class="pl-k">:</span> <span class="pl-k">new</span> <span class="pl-en">RegExp</span>(name, <span class="pl-s"><span class="pl-pds">'</span>i<span class="pl-pds">'</span></span>) }, cb);
+    }
+    <span class="pl-k">var</span> animalMode <span class="pl-k">=</span> db.model(<span class="pl-s"><span class="pl-pds">'</span>Animal<span class="pl-pds">'</span></span>, animalSchema);
+
+    animalMode.findByName(<span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">err</span>, <span class="pl-smi">animals</span>) {
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(animals);
+    });</pre></div>
+
+<hr>
+
+<p><strong>索引</strong></p>
+
+<p>我们可以为mongodb数据建立索引，mongodb支持二级索引，为了提高数据查找和定位，建立复合索引是必要的</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> animalSchema <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Schema</span>({
+      name<span class="pl-k">:</span> <span class="pl-c1">String</span>,
+      age<span class="pl-k">:</span> <span class="pl-c1">Number</span>,
+      tags<span class="pl-k">:</span> { age<span class="pl-k">:</span> [<span class="pl-c1">String</span>], index<span class="pl-k">:</span> <span class="pl-c1">true</span> } <span class="pl-c">// field level</span>
+    });
+
+    animalSchema.<span class="pl-c1">index</span>({ name<span class="pl-k">:</span> <span class="pl-c1">1</span>, age<span class="pl-k">:</span> <span class="pl-k">-</span><span class="pl-c1">1</span> }); <span class="pl-c">// schema level</span></pre></div>
+
+<p>但是这种索引的建立可能导致显著的性能影响，建议在生产下停止，将设置模式下的自动索引设置为false禁止</p>
+
+<div class="highlight highlight-javascript"><pre>    animalSchema.set(<span class="pl-s"><span class="pl-pds">'</span>autoIndex<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>);
+    <span class="pl-c">// or</span>
+    <span class="pl-k">new</span> <span class="pl-en">Schema</span>({..}, { autoIndex<span class="pl-k">:</span> <span class="pl-c1">false</span> });</pre></div>
+
+<hr>
+
+<h2>
+<a id="model" class="anchor" href="#model" aria-hidden="true"><span class="octicon octicon-link"></span></a>Model</h2>
+
+<h3>
+<a id="c" class="anchor" href="#c" aria-hidden="true"><span class="octicon octicon-link"></span></a>C</h3>
+
+<div class="highlight highlight-javascript"><pre>    cat.save(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">thor</span>) {
+        <span class="pl-k">if</span> (err) <span class="pl-k">return</span> <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(thor);
+    });
+    <span class="pl-c">//或者可以使用create</span>
+    cat.create(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">thor</span>) {
+        <span class="pl-k">if</span> (err) <span class="pl-k">return</span> <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+        <span class="pl-en">console</span><span class="pl-c1">.log</span>(thor);
+    });</pre></div>
+
+<h3>
+<a id="r" class="anchor" href="#r" aria-hidden="true"><span class="octicon octicon-link"></span></a>R</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">//find</span>
+animalMode.<span class="pl-c1">find</span>(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+    <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+})
+
+<span class="pl-c">//findOne</span>
+animalMode.findOne({name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>}, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+    <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+})
+
+<span class="pl-c">//findByID</span>
+<span class="pl-c">//与 findOne 相同，但它接收文档的 _id 作为参数，返回单个文档。_id //可以是字符串或 ObjectId 对象。</span>
+animalMode.findById(id, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">adventure</span>){
+    <span class="pl-k">if</span> (err) consoel<span class="pl-c1">.log</span>(err);
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(adventure);
+});
+
+<span class="pl-c">//where</span>
+<span class="pl-c">//查询数据类型是字符串时，可支持正则</span>
+animalMode.where(<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>2<span class="pl-pds">'</span></span>).<span class="pl-c1">exec</span>(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+    <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+});
+
+animalMode
+    .where(<span class="pl-s"><span class="pl-pds">'</span>age<span class="pl-pds">'</span></span>).gte(<span class="pl-c1">1</span>).lte(<span class="pl-c1">10</span>)
+    .where(<span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>)
+    .<span class="pl-c1">exec</span>(<span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+      <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+      <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+    });
+</pre></div>
+
+<h3>
+<a id="u" class="anchor" href="#u" aria-hidden="true"><span class="octicon octicon-link"></span></a>U</h3>
+
+<p>官方文档提供的更新函数<a href="http://mongoosejs.com/docs/api.html#model_Model.update">Model.update</a></p>
+
+<pre><code>Model.update(conditions, doc, [options], [callback])
+</code></pre>
+
+<ul>
+<li>conditions   更新条件</li>
+<li>doc  更新内容</li>
+<li>
+<p>option   更新选项</p>
+
+<ul>
+<li>safe (boolean) 安全模式，默认选项，值为true</li>
+<li>upsert (boolean) 条件不匹配时是否创建新文档，默认值为false</li>
+<li>multi (boolean) 是否更新多个文件，默认值为false</li>
+<li>strict (boolean) 严格模式，只更新一条数据</li>
+<li>overwrite (boolean) 覆盖数据，默认为false</li>
+</ul>
+</li>
+<li>
+<p>callback</p>
+
+<ul>
+<li>err 更新数据出错时返回值</li>
+<li>numberAffected （笔者暂时不清楚）</li>
+<li>rawResponse 受影响的行数</li>
+</ul>
+
+<div class="highlight highlight-javascript"><pre>animalMode.update({name<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>catName<span class="pl-pds">'</span></span>}, {age<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>6<span class="pl-pds">'</span></span>}, {multi <span class="pl-k">:</span> <span class="pl-c1">true</span>}, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">numberAffected</span>, <span class="pl-smi">raw</span>){
+<span class="pl-k">if</span> (err) <span class="pl-k">return</span> <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+<span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">'</span>The number of updated documents was %d<span class="pl-pds">'</span></span>, numberAffected);
+<span class="pl-en">console</span><span class="pl-c1">.log</span>(<span class="pl-s"><span class="pl-pds">'</span>The raw response from Mongo was <span class="pl-pds">'</span></span>, raw);
+});</pre></div>
+</li>
+</ul>
+
+<h3>
+<a id="d" class="anchor" href="#d" aria-hidden="true"><span class="octicon octicon-link"></span></a>D</h3>
+
+<div class="highlight highlight-javascript"><pre>animalMode.<span class="pl-c1">remove</span>({age<span class="pl-k">:</span> <span class="pl-c1">6</span>}, <span class="pl-k">function</span>(<span class="pl-smi">err</span>){
+    <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+})</pre></div>
+
+<h3>
+<a id="其它" class="anchor" href="#%E5%85%B6%E5%AE%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>其它</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-c">//返回文档数</span>
+animalMode.count({age<span class="pl-k">:</span> <span class="pl-c1">2</span>}, <span class="pl-k">function</span>(<span class="pl-smi">err</span>, <span class="pl-smi">cat</span>){
+    <span class="pl-k">if</span> (err) <span class="pl-en">console</span><span class="pl-c1">.log</span>(err);
+    <span class="pl-en">console</span><span class="pl-c1">.log</span>(cat);
+})</pre></div>
+
+<hr>
+
+<h2>
+<a id="资源推荐" class="anchor" href="#%E8%B5%84%E6%BA%90%E6%8E%A8%E8%8D%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>资源推荐</h2>
+
+<p><a href="http://mongoosejs.com/docs/guide.html">mongoosejs.com</a></p>
+
+<blockquote>
+<p>持续更新中...</p>
+</blockquote>
+
+<pre><code>由于笔者也是初学者，有地方讲的不对，
+欢迎给我邮件（417022902@qq.com）谢谢^-^
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jayZOU/mongoose-study">Mongoose-study</a> is maintained by <a href="https://github.com/jayZOU">jayZOU</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
+
